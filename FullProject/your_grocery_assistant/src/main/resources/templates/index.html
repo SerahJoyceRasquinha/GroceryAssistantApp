@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Assistant - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Shapes */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            animation: float 25s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            bottom: -150px;
+            right: -150px;
+            animation-delay: 3s;
+        }
+
+        .shape:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            top: 40%;
+            right: 5%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(50px, -50px) rotate(120deg) scale(1.1); }
+            66% { transform: translate(-30px, 30px) rotate(240deg) scale(0.9); }
+        }
+
+        /* Main Container */
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-size: 40px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .app-title {
+            font-size: 3rem;
+            color: white;
+            font-weight: 800;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            letter-spacing: -1px;
+        }
+
+        .app-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Reminders Grid */
+        .reminders-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .reminder-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideUp 0.6s ease-out;
+            animation-fill-mode: both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reminder-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reminder-card:nth-child(1) { animation-delay: 0.1s; }
+        .reminder-card:nth-child(2) { animation-delay: 0.2s; }
+        .reminder-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .reminder-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .reminder-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .reminder-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .reminder-card h2 {
+            color: #2d3748;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            flex: 1;
+        }
+
+        .reminder-category {
+            margin-bottom: 24px;
+        }
+
+        .reminder-category:last-of-type {
+            margin-bottom: 28px;
+        }
+
+        .reminder-card h3 {
+            color: #4a5568;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reminder-card h3::before {
+            content: '📦';
+            font-size: 1.1rem;
+        }
+
+        .reminder-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .reminder-card li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 10px;
+            color: #2d3748;
+            font-size: 0.95rem;
+            font-weight: 500;
+            position: relative;
+            padding-left: 40px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .reminder-card li:hover {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            border-color: #4fd1c5;
+            transform: translateX(4px);
+        }
+
+        .reminder-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 14px;
+            color: #48bb78;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Button Container */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .reminder-close-btn, .logout-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .reminder-close-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .reminder-close-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .logout-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .logout-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Main Action Section */
+        .main-actions {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .action-title {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .action-subtitle {
+            color: #718096;
+            font-size: 1rem;
+            margin-bottom: 32px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            padding: 18px 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 14px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .home-btn:hover::before {
+            left: 100%;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .home-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: bounce 2s infinite;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 2.2rem;
+            }
+
+            .reminders-container {
+                grid-template-columns: 1fr;
+            }
+
+            .reminder-card {
+                padding: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .main-actions {
+                padding: 32px 24px;
+            }
+
+            .action-title {
+                font-size: 1.5rem;
+            }
+
+            .home-btn {
+                padding: 16px 40px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .logo {
+                width: 64px;
+                height: 64px;
+                font-size: 32px;
+            }
+
+            .app-title {
+                font-size: 1.8rem;
+            }
+
+            .app-subtitle {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="page-wrapper">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🛒</div>
+            <h1 class="app-title">Grocery Assistant</h1>
+            <p class="app-subtitle">Your smart shopping companion</p>
+        </div>
+
+        <!-- Reminders Section -->
+        <div th:if="${reminders != null and !reminders.isEmpty()}" class="reminders-container">
+            <div th:each="sec : ${reminders}" class="reminder-card">
+                <div class="reminder-header">
+                    <div class="reminder-icon">🔔</div>
+                    <h2 th:text="${sec.name}">Section Name</h2>
+                </div>
+
+                <div class="reminder-category" th:each="cat : ${sec.categories}">
+                    <h3 th:text="${cat.name}">Category Name</h3>
+                    <ul>
+                        <li th:each="item : ${cat.items}" th:text="${item.name}">Item Name</li>
+                    </ul>
+                </div>
+
+                <div class="button-group">
+                    <form action="/close-reminder" method="post" style="flex: 1;">
+                        <input type="hidden" name="sectionId" th:value="${sec.id}">
+                        <button type="submit" class="reminder-close-btn">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State (when no reminders) -->
+        <div th:if="${reminders == null or reminders.isEmpty()}" class="empty-state">
+            <div class="empty-state-icon">✨</div>
+            <h3>All caught up!</h3>
+            <p>No active reminders at the moment</p>
+        </div>
+
+        <!-- Main Actions -->
+        <div class="main-actions">
+            <h2 class="action-title">Manage Your Lists</h2>
+            <p class="action-subtitle">View and organize your grocery sections</p>
+            <a class="home-btn" href="/grocery-sections">
+                View Grocery Sections →
+            </a>
+            <form th:action="@{/logout}" method="post" style="flex: 1;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

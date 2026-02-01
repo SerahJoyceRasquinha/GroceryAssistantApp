@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grocery Sections</title>
+
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.grocery-card {
+    background: white;
+    max-width: 1200px;
+    width: 100%;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    animation: slideIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1.75rem 2rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+}
+
+.home-btn {
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.home-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateX(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.header-title {
+    color: white;
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-align: center;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin: 0;
+}
+
+.logout-btn {
+    padding: 0.75rem 1.5rem !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: white !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    cursor: pointer;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px);
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.section-box {
+    padding: 2rem;
+    margin: 2rem;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.section-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+    pointer-events: none;
+}
+
+.section-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(255, 107, 107, 0.4);
+}
+
+.section-box h3 {
+    color: white;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.category-box {
+    background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 6px 20px rgba(81, 207, 102, 0.25);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+    pointer-events: none;
+}
+
+.category-box:hover {
+    transform: translateX(4px);
+    box-shadow: 0 8px 24px rgba(81, 207, 102, 0.35);
+}
+
+.category-box h4 {
+    color: white;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+.section-box,
+.category-box {
+    overflow: visible !important;
+}
+
+ul {
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0;
+}
+
+ul li {
+    padding: 0.875rem 1.25rem;
+    margin: 0.625rem 0;
+    background: linear-gradient(135deg, #4dabf7 0%, #339af0 100%);
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(77, 171, 247, 0.25);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+ul li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+    pointer-events: none;
+}
+
+ul li:hover {
+    background: linear-gradient(135deg, #339af0 0%, #228be6 100%);
+    transform: translateX(8px);
+    box-shadow: 0 6px 16px rgba(77, 171, 247, 0.35);
+}
+
+form {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    align-items: flex-start;
+}
+
+.relative {
+    position: relative;
+    flex: 1;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    outline: none;
+    background: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    color: #2d3748;
+}
+
+input[type="text"]:focus {
+    border-color: white;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: white;
+    transform: translateY(-2px);
+}
+
+input[type="text"]::placeholder {
+    color: #a0aec0;
+}
+
+button {
+    padding: 0.875rem 1.5rem;
+    background: white;
+    color: #2d3748;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: #f0f0f0;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #c92a2a 0%, #a61e1e 100%) !important;
+    color: white !important;
+    width: 40px;
+    height: 40px;
+    padding: 0 !important;
+    border-radius: 10px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    min-width: 40px;
+    box-shadow: 0 4px 12px rgba(201, 42, 42, 0.3) !important;
+    transition: all 0.3s ease !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #a61e1e 0%, #8b1515 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(201, 42, 42, 0.4) !important;
+}
+
+.autocomplete-box {
+    position: absolute;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 9999;
+    margin-top: 0.5rem;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.autocomplete-item {
+    padding: 0.875rem 1.25rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: #2d3748;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item:hover {
+    background: linear-gradient(135deg, #edf2ff 0%, #dbe4ff 100%);
+    color: #667eea;
+    padding-left: 1.5rem;
+}
+
+.reminder-form {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.75rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.reminder-form select {
+    padding: 0.875rem 1.25rem;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: white;
+    color: #2d3748;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232d3748' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+    padding-right: 3rem;
+}
+
+.reminder-form select:hover {
+    border-color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.reminder-form select:focus {
+    border-color: white;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+}
+
+.add-section-wrapper {
+    padding: 2.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-top: 3px solid #dee2e6;
+}
+
+.error-msg {
+    color: #dc2626;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-left: 4px solid #dc2626;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: none;
+    animation: shake 0.4s ease-in-out;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.section-box.expanded, .category-box.expanded {
+    padding-bottom: 300px;
+    transition: padding-bottom 0.3s ease;
+}
+
+/* Enhanced Category Chips Container */
+.category-chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 16px;
+    margin-top: 0;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced Category Chip Styles */
+.category-chip {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.3px;
+}
+
+.category-chip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.category-chip:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.45);
+}
+
+.category-chip:active {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Smooth scrollbar for autocomplete */
+.autocomplete-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.autocomplete-box::-webkit-scrollbar-track {
+    background: #f1f3f5;
+    border-radius: 10px;
+}
+
+.autocomplete-box::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+.autocomplete-box::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .home-btn, .logout-btn {
+        justify-content: center;
+    }
+    
+    .reminder-form {
+        flex-direction: column;
+    }
+    
+    .reminder-form select,
+    .reminder-form button {
+        width: 100%;
+    }
+    
+    .category-chips-container {
+        gap: 8px;
+        padding: 12px 14px;
+    }
+    
+    .category-chip {
+        font-size: 0.85rem;
+        padding: 8px 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grocery-card">
+    <div class="header-container">
+        <a class="home-btn" href="/">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+        <h2 class="header-title">
+            <i class="bi bi-cart-fill"></i> GROCERY LIST
+        </h2>
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="logout-btn">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+        </form>
+    </div>
+
+    <div th:each="section : ${sections}">
+        <div class="section-box">
+            <h3>
+                <span th:text="${section.name}">Section Name</span>
+                <form action="/delete-section" method="post" class="delete-form" style="margin: 0;">
+                    <input type="hidden" name="sectionId" th:value="${section.id}">
+                    <button class="delete-btn" type="submit" title="Delete Section">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </form>
+            </h3>
+
+            <form action="/update-reminder" method="post" class="reminder-form">
+                <input type="hidden" name="sectionId" th:value="${section.id}">
+                <select name="reminderIntervalDays" required>
+                    <option th:value="1" th:selected="${section.reminderIntervalDays == 1}">1 day</option>
+                    <option th:value="3" th:selected="${section.reminderIntervalDays == 3}">3 days</option>
+                    <option th:value="7" th:selected="${section.reminderIntervalDays == 7}">1 week</option>
+                    <option th:value="30" th:selected="${section.reminderIntervalDays == 30}">1 month</option>
+                </select>
+                <select name="reminderHour" required>
+                    <option th:each="h : ${#numbers.sequence(0,23)}"
+                            th:value="${h}"
+                            th:selected="${section.reminderTime != null && section.reminderTime.hour == h}"
+                            th:text="${h < 10 ? '0' + h : h}"></option>
+                </select>
+                <select name="reminderMinute" required>
+                    <option th:each="m : ${#numbers.sequence(0,59)}"
+                            th:value="${m}"
+                            th:selected="${section.reminderTime != null && section.reminderTime.minute == m}"
+                            th:text="${m < 10 ? '0' + m : m}"></option>
+                </select>
+                <button type="submit">
+                    <i class="bi bi-check-circle-fill"></i> Update
+                </button>
+            </form>
+
+            <div class="category-box" th:each="cat : ${section.categories}">
+                <h4>
+                    <span th:text="${cat.name}">Category Name</span>
+                    <form action="/delete-category" method="post" class="delete-form" style="margin: 0;">
+                        <input type="hidden" name="categoryId" th:value="${cat.id}">
+                        <button class="delete-btn" type="submit" title="Delete Category">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </form>
+                </h4>
+
+                <ul>
+                    <li th:each="item : ${cat.items}">
+                        <span th:text="${item.name}">Item Name</span>
+                        <form action="/delete-item" method="post" class="delete-form" style="margin: 0;">
+                            <input type="hidden" name="itemId" th:value="${item.id}">
+                            <button class="delete-btn" type="submit" title="Delete Item">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+
+                <form action="/add-item" method="post">
+                    <div class="relative">
+                        <div class="error-msg"></div>
+                        <input type="hidden" name="categoryId" th:value="${cat.id}">
+                        <input type="text" 
+                                name="name" 
+                                class="item-input" 
+                                placeholder="Add item..." 
+                                th:attr="data-category-id=${cat.id}">
+                        <div class="autocomplete-box"></div>
+                    </div>
+                    <button type="submit">
+                        <i class="bi bi-plus-circle-fill"></i> Add Item
+                    </button>
+                </form>
+            </div>
+
+            <form action="/add-category" method="post">
+                <div class="relative">
+                    <div class="error-msg"></div>
+                    <input type="hidden" name="sectionId" th:value="${section.id}">
+                    <input type="text"
+                           name="name"
+                           class="category-input"
+                           placeholder="Type a New Category">
+                    <div class="autocomplete-box"></div>
+                </div>
+                <button type="submit">
+                    <i class="bi bi-plus-circle-fill"></i> Add Category
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="add-section-wrapper">
+        <form action="/add-section" method="post" class="reminder-form">
+            <div style="flex:2; width: 100%;">
+                <div class="error-msg"></div>
+                <input type="text" name="name" class="section-input" placeholder="New Section Name" required>
+            </div>
+            <select name="reminderIntervalDays" required>
+                <option value="1">1 day</option>
+                <option value="3">3 days</option>
+                <option value="7">1 week</option>
+                <option value="30">1 month</option>
+            </select>
+            <select name="reminderHour" required>
+                <option value="" disabled selected>HH</option>
+                <option th:each="h : ${#numbers.sequence(0,23)}" th:value="${h}" th:text="${h < 10 ? '0' + h : h}"></option>
+            </select>
+            <select name="reminderMinute" required>
+                <option value="" disabled selected>MM</option>
+                <option th:each="m : ${#numbers.sequence(0,59)}" th:value="${m}" th:text="${m < 10 ? '0' + m : m}"></option>
+            </select>
+            <button type="submit">
+                <i class="bi bi-plus-circle-fill"></i> Add Section
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const sectionRegex  = /^[A-Za-z][A-Za-z0-9 &(),-]*$/;
+const categoryRegex = /^[A-Za-z][A-Za-z0-9 &(),-]*$/;
+const itemRegex     = /^\S.+$/;
+
+function validateInput(input, regex, message) {
+    const errorBox = input.previousElementSibling;
+    const value = input.value;
+    if (!regex.test(value)) {
+        errorBox.textContent = message;
+        errorBox.style.display = "block";
+        return false;
+    } else {
+        errorBox.style.display = "none";
+        return true;
+    }
+}
+
+document.querySelectorAll(".section-input").forEach(input => {
+    input.addEventListener("input", () => validateInput(input, sectionRegex, "Invalid Section Name"));
+});
+
+document.querySelectorAll(".category-input").forEach(input => {
+    input.addEventListener("input", () => validateInput(input, categoryRegex, "Invalid Category Name"));
+});
+
+document.querySelectorAll(".item-input").forEach(input => {
+    input.addEventListener("input", () => validateInput(input, itemRegex, "Invalid Item Name"));
+});
+
+document.querySelectorAll("form").forEach(form => {
+    form.addEventListener("submit", e => {
+        const input = form.querySelector("input[type='text']");
+        if (!input) return;
+        let valid = true;
+        if (input.classList.contains("section-input")) valid = validateInput(input, sectionRegex, "Invalid Section Name");
+        if (input.classList.contains("category-input")) valid = validateInput(input, categoryRegex, "Invalid Category Name");
+        if (input.classList.contains("item-input")) valid = validateInput(input, itemRegex, "Invalid Item Name");
+        if (!valid) e.preventDefault();
+    });
+});
+
+async function fetchSuggestions(url) {
+    try {
+        const res = await fetch(url);
+        return res.ok ? res.json() : [];
+    } catch { return []; }
+}
+
+function setupAutocomplete(input, type) {
+    const parent = input.parentElement;
+    const box = parent.querySelector(".autocomplete-box");
+    const container = parent.closest(".section-box, .category-box, .add-section-wrapper");
+
+    const load = async () => {
+        const q = input.value.trim();
+        let url;
+
+        if (type === "category") {
+            if (q.length > 0) {
+                box.innerHTML = "";
+                container?.classList.remove("expanded");
+                return;
+            }
+            url = `/api/recommend/categories`;
+        } else {
+            const catId = input.getAttribute('data-category-id') || "";
+            url = `/api/recommend/items?q=${encodeURIComponent(q)}&categoryId=${catId}`;
+        }
+
+        const data = await fetchSuggestions(url);
+        box.innerHTML = "";
+        
+        if (data.length > 0) {
+            container?.classList.add("expanded");
+            
+            if (type === "category") {
+                const chipsWrapper = document.createElement("div");
+                chipsWrapper.className = "category-chips-container";
+                
+                data.forEach(val => {
+                    const chip = document.createElement("button");
+                    chip.type = "button";
+                    chip.className = "category-chip";
+                    chip.textContent = val;
+                    chip.onclick = (e) => {
+                        e.preventDefault();
+                        input.value = val;
+                        box.innerHTML = "";
+                        container?.classList.remove("expanded");
+                        input.focus();
+                    };
+                    chipsWrapper.appendChild(chip);
+                });
+                box.appendChild(chipsWrapper);
+            } else {
+                data.forEach(val => {
+                    const div = document.createElement("div");
+                    div.className = "autocomplete-item";
+                    div.textContent = val;
+                    div.onclick = () => {
+                        input.value = val;
+                        box.innerHTML = "";
+                        container?.classList.remove("expanded");
+                    };
+                    box.appendChild(div);
+                });
+            }
+        } else {
+            container?.classList.remove("expanded");
+        }
+    };
+
+    input.addEventListener("focus", load);
+    input.addEventListener("input", load);
+
+    document.addEventListener("click", (e) => {
+        if (!parent.contains(e.target)) {
+            box.innerHTML = "";
+            container?.classList.remove("expanded");
+        }
+    });
+}
+
+document.querySelectorAll(".category-input").forEach(i => setupAutocomplete(i, "category"));
+document.querySelectorAll(".item-input").forEach(i => setupAutocomplete(i, "item"));
+</script>
+
+</body>
+</html>
